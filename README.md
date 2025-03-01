@@ -1,8 +1,7 @@
 # wibesoftCase
 
-
  
-Project Overview
+## Project Overview
 This is a farming & building simulation game with a grid-based system. Players can:
 
 ✅ Plant three different crops: Carrot, Corn, and Sunflower
@@ -13,13 +12,13 @@ This is a farming & building simulation game with a grid-based system. Players c
 ✅ Visual placement indicators (green = valid, red = occupied)
 ✅ Obstacle-aware grid system to prevent placement on blocked tiles
 
-Technology Stack
-Unity (Game Engine)
-C# (Programming Language)
-Scriptable Objects (Data Storage)
-DOTween (Animation & Tweening)
+## Technology Stack  
+- **Unity** (Game Engine)  
+- **C#** (Programming Language)  
+- **Scriptable Objects** (Data Storage)  
+- **DOTween** (Animation & Tweening)  
 
-System Architecture
+## System Architecture
 Crop Growth System 🌱
 BaseCrop (Abstract Class):
 Manages crop growth over time.
@@ -28,14 +27,14 @@ Animates growth with DOTween.
 Supports smooth harvesting animations.
 Easily expandable (Carrot, Corn, Sunflower exist currently).
 
-Farm Grid System 🏡
+## Farm Grid System 🏡
 FarmGridCell:
 Handles player interaction with farm plots.
 Allows crop selection, planting, and harvesting.
 Uses drag-and-drop mechanics for interaction.
 Displays crop growth status on click.
 
-Building System 🏗️
+## Building System 🏗️
 Building Placement Mechanics:
 
 Access the Store Panel (bottom left) to select a building.
@@ -56,20 +55,24 @@ Defines each building's grid size (e.g., 4x4 tiles).
 Determines placement constraints on the farm grid.
 Allows easy expansion for new buildings without modifying core scripts.
 
-How to Run the Project
+## How to Run the Project
 Open the project in Unity 2021.3+
 Plant crops on farm grid cells.
 Watch crops grow and harvest them.
 Enter the store, choose a building, and place it on the grid.
 Modify building placements by holding them for 2 seconds.
 
-Gameplay Screenshots
-(Images/1.png)
-(Images/2.png)
-(Images/3.png)
-(Images/4.png)
-(Images/5.png)
-(Images/6.png)
-(Images/7.png)
-(Images/8.png)
+## Gameplay Screenshots  
+Here are some in-game visuals:  
+
+![Crop Growth](Images/1.png)  
+![Building Placement](Images/2.png)  
+![Harvesting Animation](Images/3.png)  
+![Harvesting Animation](Images/4.png)
+![Harvesting Animation](Images/5.png)
+![Harvesting Animation](Images/6.png)
+![Harvesting Animation](Images/7.png)
+![Harvesting Animation](Images/8.png)
+
+
 
