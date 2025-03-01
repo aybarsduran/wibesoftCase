@@ -4,6 +4,6 @@ public class Carrot : BaseCrop
 {
     private void Awake()
     {
-        GrowthTime = 75f; 
+        GrowthTime = 30f; 
     }
 }

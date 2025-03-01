@@ -24,6 +24,8 @@ public class GridCell : MonoBehaviour
         if (IsOccupied) return;
 
         _currentCrop = Instantiate(cropPrefab, transform.position, Quaternion.identity);
+        _currentCrop.transform.SetParent(transform);
+        _currentCrop.transform.position = transform.position + new Vector3(0,2.2f,0);
         IsOccupied = true;
     }
 }
