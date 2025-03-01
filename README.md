@@ -1,5 +1,8 @@
 # wibesoftCase
 
+## 🎥 Demo Video  
+Click below to watch the gameplay demo:  
+[YouTube Video](https://youtu.be/orBxfn2uZ1Y)
  
 ## Project Overview
 This is a farming & building simulation game with a grid-based system. Players can:
