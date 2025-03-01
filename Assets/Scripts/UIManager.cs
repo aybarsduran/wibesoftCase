@@ -25,6 +25,15 @@ public class UIManager : MonoBehaviour
     public Button BuildingPanelCloseButton;
     public RectTransform BuildingPanel;
 
+    [Header("Building UI Elements")]
+    public Button HouseButton;
+    public BuildingData HouseBuilding;
+
+    public Button TowerButton;
+    public BuildingData TowerBuilding;
+
+
+
     private Coroutine _timerCoroutine;
     private void Awake()
     {
@@ -51,11 +60,17 @@ public class UIManager : MonoBehaviour
         BuildingButton.onClick.AddListener(ShowBuildingPanel);
         BuildingPanelCloseButton.onClick.AddListener(HideBuildingPanel);
 
+        HouseButton.onClick.AddListener(() => OnBuildingButtonClick(HouseBuilding));
+        TowerButton.onClick.AddListener(() => OnBuildingButtonClick(TowerBuilding));
+
     }
     private void OnDisable()
     {
         BuildingButton.onClick.RemoveListener(ShowBuildingPanel);
         BuildingPanelCloseButton.onClick.RemoveListener(HideBuildingPanel);
+
+        HouseButton.onClick.RemoveListener(() => OnBuildingButtonClick(HouseBuilding));
+        TowerButton.onClick.RemoveListener(() => OnBuildingButtonClick(TowerBuilding));
     }
 
     public void ShowCropSelectionPanel(Vector3 worldPosition)
@@ -155,5 +170,16 @@ public class UIManager : MonoBehaviour
     {
         BuildingPanel.gameObject.SetActive(false);
         BuildingPanel.DOScaleX(0, 0.3f).SetEase(Ease.InBack);
-    }   
+    }
+
+    private void OnBuildingButtonClick(BuildingData building)
+    {
+        BuildingPanel.transform.DOScaleX(0, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            BuildingPanel.gameObject.SetActive(false);
+            BuildingPlacementManager.Instance.StartPlacingBuilding(building);
+        });
+    }
+
+
 }

@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
 
     void HandleMovement()
     {
-        if (UIManager.Instance != null && UIManager.Instance.IsUIActive()) return;
+        if (UIManager.Instance != null && UIManager.Instance.IsUIActive() || BuildingPlacementManager.Instance.IsPlacingOrMovingBuilding()) return;
         Vector3 move = Vector3.zero;
 
         if (Input.GetMouseButton(0)) 
