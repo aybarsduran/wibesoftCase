@@ -30,7 +30,7 @@ public class CropHarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            GridCell cell = hit.collider.GetComponent<GridCell>();
+            FarmGridCell cell = hit.collider.GetComponent<FarmGridCell>();
             if (cell != null && cell.IsCropFullyGrown())
             {
                 HarvestCrop(cell);
@@ -46,7 +46,7 @@ public class CropHarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    private void HarvestCrop(GridCell cell)
+    private void HarvestCrop(FarmGridCell cell)
     {
         cell.HarvestCrop();
     }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,11 @@ public class UIManager : MonoBehaviour
     [Header("Harvest UI")]
     public GameObject HarvestPanel;
 
+    [Header("Building UI")]
+    public Button BuildingButton;
+    public Button BuildingPanelCloseButton;
+    public RectTransform BuildingPanel;
+
     private Coroutine _timerCoroutine;
     private void Awake()
     {
@@ -33,7 +39,23 @@ public class UIManager : MonoBehaviour
     }
     private void Start()
     {
+        CropSelectionPanel.transform.localScale = Vector3.zero;
+        CropTimerPanel.transform.localScale = Vector3.zero;
+        HarvestPanel.transform.localScale = Vector3.zero;
         HideAllPanels();
+        BuildingPanel.localScale = new Vector3(0, 1, 1);
+        BuildingPanel.gameObject.SetActive(false);
+    }
+    private void OnEnable()
+    {
+        BuildingButton.onClick.AddListener(ShowBuildingPanel);
+        BuildingPanelCloseButton.onClick.AddListener(HideBuildingPanel);
+
+    }
+    private void OnDisable()
+    {
+        BuildingButton.onClick.RemoveListener(ShowBuildingPanel);
+        BuildingPanelCloseButton.onClick.RemoveListener(HideBuildingPanel);
     }
 
     public void ShowCropSelectionPanel(Vector3 worldPosition)
@@ -42,7 +64,7 @@ public class UIManager : MonoBehaviour
 
         CropSelectionPanel.SetActive(true);
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
-        CropSelectionPanel.transform.position = screenPosition + new Vector3(-200f, 100f, 0f);
+        ShowPanelWithEffect(CropSelectionPanel, screenPosition + new Vector3(-200f, 100f, 0f));
     }
 
 
@@ -55,10 +77,8 @@ public class UIManager : MonoBehaviour
         if (crop == null || crop.IsFullyGrown()) return;
         HideAllPanels();
 
-        CropTimerPanel.SetActive(true);
-
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
-        CropTimerPanel.transform.position = screenPosition + new Vector3(0f, -150f, 0f);
+        ShowPanelWithEffect(CropTimerPanel, screenPosition + new Vector3(0f, -150f, 0f));
 
         NameText.text = crop.CropName;
 
@@ -93,10 +113,9 @@ public class UIManager : MonoBehaviour
     {
         HideAllPanels();
 
-        HarvestPanel.SetActive(true);
 
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
-        HarvestPanel.transform.position = screenPosition + new Vector3(-200f, 100f, 0f);
+        ShowPanelWithEffect(HarvestPanel, screenPosition + new Vector3(-200f, 100f, 0f));
     }
 
     public void HideCropSelectionPanel() => CropSelectionPanel.SetActive(false);
@@ -115,7 +134,26 @@ public class UIManager : MonoBehaviour
     private void HideAllPanels()
     {
         HideCropTimerPanel();
-        HideCropTimerPanel();
+        HideCropSelectionPanel();
         HideHarvestPanel();
     }
+
+    private void ShowPanelWithEffect(GameObject panel, Vector3 position)
+    {
+        panel.SetActive(true);
+        panel.transform.position = position;
+        panel.transform.localScale = Vector3.zero;
+        panel.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+    }
+
+    public void ShowBuildingPanel()
+    {
+        BuildingPanel.gameObject.SetActive(true);
+        BuildingPanel.DOScaleX(1, 0.3f).SetEase(Ease.OutBack);
+    }
+    public void HideBuildingPanel()
+    {
+        BuildingPanel.gameObject.SetActive(false);
+        BuildingPanel.DOScaleX(0, 0.3f).SetEase(Ease.InBack);
+    }   
 }

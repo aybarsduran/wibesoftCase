@@ -30,7 +30,7 @@ public class CropDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            GridCell cell = hit.collider.GetComponent<GridCell>();
+            FarmGridCell cell = hit.collider.GetComponent<FarmGridCell>();
             if (cell != null && !cell.IsOccupied)
             {
                 PlaceCrop(cell);
@@ -48,7 +48,7 @@ public class CropDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
        
     }
 
-    private void PlaceCrop(GridCell cell)
+    private void PlaceCrop(FarmGridCell cell)
     {
         cell.PlantCrop(cropPrefab);
     }

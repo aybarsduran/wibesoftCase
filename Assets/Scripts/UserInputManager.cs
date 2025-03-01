@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class UserInputManager : MonoBehaviour
 {
     public Camera Cam;
-    private GridCell _selectedCell = null;
+    private FarmGridCell _selectedCell = null;
     private BaseCrop _selectedCrop = null;
     private bool _isPlacingCrop = false;
     void Update()
@@ -24,7 +24,7 @@ public class UserInputManager : MonoBehaviour
         Ray ray = Cam.ScreenPointToRay(inputPosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            GridCell cell = hit.collider.GetComponent<GridCell>();
+            FarmGridCell cell = hit.collider.GetComponent<FarmGridCell>();
             HandleCellClick(cell);
         }
         else
@@ -33,7 +33,7 @@ public class UserInputManager : MonoBehaviour
         }
     }
 
-    private void HandleCellClick(GridCell cell)
+    private void HandleCellClick(FarmGridCell cell)
     {
         if (_isPlacingCrop)
         {
@@ -45,7 +45,7 @@ public class UserInputManager : MonoBehaviour
         }
     }
 
-    private void TryPlaceCrop(GridCell cell)
+    private void TryPlaceCrop(FarmGridCell cell)
     {
         if (cell != null && !cell.IsOccupied)
         {
@@ -55,7 +55,7 @@ public class UserInputManager : MonoBehaviour
         }
     }
 
-    private void HandleCellSelection(GridCell cell)
+    private void HandleCellSelection(FarmGridCell cell)
     {
         if (cell == null)
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GridCell : MonoBehaviour
+public class FarmGridCell : MonoBehaviour
 {
     public bool IsOccupied { get; private set; } = false; 
     private Outline _outline;

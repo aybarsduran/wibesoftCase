@@ -28,9 +28,16 @@ public abstract class BaseCrop : MonoBehaviour
             yield return new WaitForSeconds(GrowthTime / (GrowthMeshes.Length - 1));
 
             _currentStage++;
-            _meshFilter.mesh = GrowthMeshes[_currentStage]; 
+
+            transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                _meshFilter.mesh = GrowthMeshes[_currentStage];
+
+                transform.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack);
+            });
         }
     }
+
 
     public bool IsFullyGrown()
     {
@@ -58,7 +65,7 @@ public abstract class BaseCrop : MonoBehaviour
             effect.transform.localScale = Vector3.zero;
 
             effect.transform.DOScale(Vector3.one* 1.1f, 0.3f).SetEase(Ease.OutBack);
-            effect.transform.DOJump(transform.position+ new Vector3(0,0.2f,0), 2f, 1, 0.5f).SetEase(Ease.OutQuad)
+            effect.transform.DOJump(transform.position+ new Vector3(0,0.3f,0), 2.5f, 1, 0.5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => Destroy(effect, 0.2f)); 
         }
 
