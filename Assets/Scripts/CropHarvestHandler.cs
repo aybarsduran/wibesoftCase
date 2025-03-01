@@ -2,9 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CropDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CropHarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public BaseCrop cropPrefab; 
     private Image _dragImage;
     private Transform _parentCanvas;
 
@@ -18,22 +17,23 @@ public class CropDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _dragImage = new GameObject("DragImage", typeof(Image)).GetComponent<Image>();
         _dragImage.transform.SetParent(_parentCanvas, false);
         _dragImage.sprite = GetComponent<Image>().sprite;
-        _dragImage.raycastTarget = false; 
+        _dragImage.raycastTarget = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (_dragImage != null)
         {
-            _dragImage.transform.position = eventData.position; 
+            _dragImage.transform.position = eventData.position;
         }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             GridCell cell = hit.collider.GetComponent<GridCell>();
-            if (cell != null && !cell.IsOccupied)
+            if (cell != null && cell.IsCropFullyGrown())
             {
-                PlaceCrop(cell);
+                HarvestCrop(cell);
             }
         }
     }
@@ -44,12 +44,10 @@ public class CropDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             Destroy(_dragImage.gameObject);
         }
-
-       
     }
 
-    private void PlaceCrop(GridCell cell)
+    private void HarvestCrop(GridCell cell)
     {
-        cell.PlantCrop(cropPrefab);
+        cell.HarvestCrop();
     }
 }

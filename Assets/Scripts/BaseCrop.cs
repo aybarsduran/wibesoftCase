@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public abstract class BaseCrop : MonoBehaviour
 {
     public string CropName;
     public Mesh[] GrowthMeshes; 
     public float GrowthTime;
+    public GameObject HarvestEffectPrefab;
 
     private int _currentStage = 0;
     private MeshFilter _meshFilter;
@@ -47,6 +49,20 @@ public abstract class BaseCrop : MonoBehaviour
     public float GetGrowthEndTime()
     {
         return _growthStartTime + GrowthTime;
+    }
+    public void Harvest()
+    {
+        if (HarvestEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(HarvestEffectPrefab, transform.position, Quaternion.identity);
+            effect.transform.localScale = Vector3.zero;
+
+            effect.transform.DOScale(Vector3.one* 1.1f, 0.3f).SetEase(Ease.OutBack);
+            effect.transform.DOJump(transform.position+ new Vector3(0,0.2f,0), 2f, 1, 0.5f).SetEase(Ease.OutQuad)
+                .OnComplete(() => Destroy(effect, 0.2f)); 
+        }
+
+        Destroy(gameObject); 
     }
 
 }

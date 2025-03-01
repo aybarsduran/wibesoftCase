@@ -7,7 +7,6 @@ public class UserInputManager : MonoBehaviour
     private GridCell _selectedCell = null;
     private BaseCrop _selectedCrop = null;
     private bool _isPlacingCrop = false;
-
     void Update()
     {
         if (IsPointerOverUI()) return;
@@ -72,9 +71,16 @@ public class UserInputManager : MonoBehaviour
         _selectedCell = cell;
         _selectedCell.Outline(true);
 
-        if (_selectedCell.IsOccupied && !_selectedCell.IsCropFullyGrown())
+        if (_selectedCell.IsOccupied)
         {
-            UIManager.Instance.ShowCropTimerPanel(_selectedCell.transform.position, _selectedCell.GetCrop());
+            if (_selectedCell.IsCropFullyGrown())
+            {
+                UIManager.Instance.ShowHarvestPanel(_selectedCell.transform.position); 
+            }
+            else
+            {
+                UIManager.Instance.ShowCropTimerPanel(_selectedCell.transform.position, _selectedCell.GetCrop());
+            }
         }
         else
         {
@@ -91,6 +97,7 @@ public class UserInputManager : MonoBehaviour
         }
         UIManager.Instance.HideCropSelectionPanel();
         UIManager.Instance.HideCropTimerPanel();
+        UIManager.Instance.HideHarvestPanel();
     }
 
     private bool IsPointerOverUI()

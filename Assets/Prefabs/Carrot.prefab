@@ -96,8 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf976990cb18804483169c61ec9a828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CropName: 
   GrowthMeshes:
   - {fileID: 2002715036992664983, guid: 1eb9800696136e9448656ad38f4e574b, type: 3}
   - {fileID: 2683140368571956053, guid: fd823b02d4dab724085a0d07af8bca70, type: 3}
   - {fileID: -8808425536343626755, guid: ede85317fc77cd540835fa5a9e4e7938, type: 3}
   GrowthTime: 0
+  HarvestEffectPrefab: {fileID: 1354996048308653523, guid: da30c56b3f093764d9d473da3bb794ef,
+    type: 3}

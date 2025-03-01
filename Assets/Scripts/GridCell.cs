@@ -31,6 +31,10 @@ public class GridCell : MonoBehaviour
 
     public bool IsCropFullyGrown()
     {
+        if(_currentCrop == null)
+        {
+            return false;
+        }
         return _currentCrop.IsFullyGrown();
     }
 
@@ -45,5 +49,14 @@ public class GridCell : MonoBehaviour
     public BaseCrop GetCrop()
     {
         return _currentCrop;
+    }
+    public void HarvestCrop()
+    {
+        if (_currentCrop != null && IsCropFullyGrown())
+        {
+            _currentCrop.Harvest();
+            _currentCrop = null;
+            IsOccupied = false;
+        }
     }
 }

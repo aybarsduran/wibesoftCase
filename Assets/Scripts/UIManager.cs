@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI NameText;
     public Image progressBar;
 
+    [Header("Harvest UI")]
+    public GameObject HarvestPanel;
 
     private Coroutine _timerCoroutine;
     private void Awake()
@@ -27,15 +29,17 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); 
+        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {
-        HideCropSelectionPanel();
+        HideAllPanels();
     }
 
     public void ShowCropSelectionPanel(Vector3 worldPosition)
     {
+        HideAllPanels();
+
         CropSelectionPanel.SetActive(true);
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
         CropSelectionPanel.transform.position = screenPosition + new Vector3(-200f, 100f, 0f);
@@ -44,18 +48,19 @@ public class UIManager : MonoBehaviour
 
     public bool IsUIActive()
     {
-        return CropSelectionPanel.activeSelf ||CropTimerPanel.activeSelf;
+        return CropSelectionPanel.activeSelf || CropTimerPanel.activeSelf || HarvestPanel.activeSelf;
     }
     public void ShowCropTimerPanel(Vector3 worldPosition, BaseCrop crop)
     {
         if (crop == null || crop.IsFullyGrown()) return;
+        HideAllPanels();
 
         CropTimerPanel.SetActive(true);
 
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
-        CropTimerPanel.transform.position = screenPosition + new Vector3(0f, -200f, 0f);
+        CropTimerPanel.transform.position = screenPosition + new Vector3(0f, -150f, 0f);
 
-        NameText.text = crop.name;
+        NameText.text = crop.CropName;
 
         if (_timerCoroutine != null)
         {
@@ -79,13 +84,24 @@ public class UIManager : MonoBehaviour
 
             progressBar.fillAmount = 1f - (remainingTime / totalTime);
 
-            yield return new WaitForSeconds(1f); 
+            yield return new WaitForSeconds(1f);
         }
 
         HideCropTimerPanel();
     }
+    public void ShowHarvestPanel(Vector3 worldPosition)
+    {
+        HideAllPanels();
+
+        HarvestPanel.SetActive(true);
+
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+        HarvestPanel.transform.position = screenPosition + new Vector3(-200f, 100f, 0f);
+    }
 
     public void HideCropSelectionPanel() => CropSelectionPanel.SetActive(false);
+    public void HideHarvestPanel() => HarvestPanel.SetActive(false);
+
     public void HideCropTimerPanel()
     {
         CropTimerPanel.SetActive(false);
@@ -96,4 +112,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void HideAllPanels()
+    {
+        HideCropTimerPanel();
+        HideCropTimerPanel();
+        HideHarvestPanel();
+    }
 }
