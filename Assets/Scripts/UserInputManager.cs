@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.EventSystems; 
+using UnityEngine.EventSystems;
 
 public class UserInputManager : MonoBehaviour
 {
@@ -14,69 +14,88 @@ public class UserInputManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
         {
-            Vector3 inputPosition;
-
-            if (Input.touchCount > 0)
-                inputPosition = Input.GetTouch(0).position; 
-            else
-                inputPosition = Input.mousePosition;
-
-            Ray ray = Cam.ScreenPointToRay(inputPosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                GridCell cell = hit.collider.GetComponent<GridCell>();
-
-                if (_isPlacingCrop) 
-                {
-                    if (cell != null && !cell.IsOccupied)
-                    {
-                        cell.PlantCrop(_selectedCrop);
-                        _selectedCrop = null;
-                        _isPlacingCrop = false;
-                    }
-                }
-                else 
-                {
-                    if (cell != null)
-                    {
-                        if (_selectedCell != null && _selectedCell != cell)
-                        {
-                            _selectedCell.Outline(false);
-                        }
-
-                        _selectedCell = cell;
-                        _selectedCell.Outline(true);
-
-                        UIManager.Instance.ShowCropSelectionPanel(_selectedCell.transform.position);
-                    }
-                    else 
-                    {
-                        if (_selectedCell != null)
-                        {
-                            _selectedCell.Outline(false);
-                            _selectedCell = null;
-                        }
-                        UIManager.Instance.HideCropSelectionPanel();
-                    }
-                }
-            }
-            else 
-            {
-                if (_selectedCell != null)
-                {
-                    _selectedCell.Outline(false);
-                    _selectedCell = null;
-                }
-                UIManager.Instance.HideCropSelectionPanel();
-            }
+            HandleInput();
         }
+    }
+
+    private void HandleInput()
+    {
+        Vector3 inputPosition = (Input.touchCount > 0) ? Input.GetTouch(0).position : Input.mousePosition;
+
+        Ray ray = Cam.ScreenPointToRay(inputPosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            GridCell cell = hit.collider.GetComponent<GridCell>();
+            HandleCellClick(cell);
+        }
+        else
+        {
+            DeselectCell();
+        }
+    }
+
+    private void HandleCellClick(GridCell cell)
+    {
+        if (_isPlacingCrop)
+        {
+            TryPlaceCrop(cell);
+        }
+        else
+        {
+            HandleCellSelection(cell);
+        }
+    }
+
+    private void TryPlaceCrop(GridCell cell)
+    {
+        if (cell != null && !cell.IsOccupied)
+        {
+            cell.PlantCrop(_selectedCrop);
+            _selectedCrop = null;
+            _isPlacingCrop = false;
+        }
+    }
+
+    private void HandleCellSelection(GridCell cell)
+    {
+        if (cell == null)
+        {
+            DeselectCell();
+            return;
+        }
+
+        if (_selectedCell != null && _selectedCell != cell)
+        {
+            _selectedCell.Outline(false);
+        }
+
+        _selectedCell = cell;
+        _selectedCell.Outline(true);
+
+        if (_selectedCell.IsOccupied && !_selectedCell.IsCropFullyGrown())
+        {
+            UIManager.Instance.ShowCropTimerPanel(_selectedCell.transform.position, _selectedCell.GetCrop());
+        }
+        else
+        {
+            UIManager.Instance.ShowCropSelectionPanel(_selectedCell.transform.position);
+        }
+    }
+
+    private void DeselectCell()
+    {
+        if (_selectedCell != null)
+        {
+            _selectedCell.Outline(false);
+            _selectedCell = null;
+        }
+        UIManager.Instance.HideCropSelectionPanel();
+        UIManager.Instance.HideCropTimerPanel();
     }
 
     private bool IsPointerOverUI()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return true; 
+        if (EventSystem.current.IsPointerOverGameObject()) return true;
 
         if (Input.touchCount > 0)
         {

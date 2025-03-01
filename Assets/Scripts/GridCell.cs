@@ -28,4 +28,22 @@ public class GridCell : MonoBehaviour
         _currentCrop.transform.position = transform.position + new Vector3(0,2.2f,0);
         IsOccupied = true;
     }
+
+    public bool IsCropFullyGrown()
+    {
+        return _currentCrop.IsFullyGrown();
+    }
+
+    public float GetTimeUntilFullyGrown()
+    {
+        if (_currentCrop != null && !_currentCrop.IsFullyGrown())
+        {
+            return _currentCrop.GetRemainingTime();
+        }
+        return 0;
+    }
+    public BaseCrop GetCrop()
+    {
+        return _currentCrop;
+    }
 }
